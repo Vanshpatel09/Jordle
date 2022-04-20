@@ -1,0 +1,806 @@
+package com.example.jordle;
+
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Random;
+
+
+public class Jordle extends Application{
+    Button reset;
+    Button close;
+    Button instr;
+
+    TextField tb00, tb10, tb20, tb30, tb40,
+            tb01, tb11, tb21, tb31, tb41,
+            tb02, tb12, tb22, tb32, tb42,
+            tb03, tb13, tb23, tb33, tb43,
+            tb04, tb14, tb24, tb34, tb44,
+            tb05, tb15, tb25, tb35, tb45;
+
+    Label l1;
+
+    Stage window;
+    Window w1;
+    Stage instruction;
+    Scene game;
+    Scene WScreen;
+    Scene instructions;
+
+    String s00, s10, s20, s30, s40,
+            s01, s11, s21, s31, s41,
+            s02, s12, s22, s32, s42,
+            s03, s13, s23, s33, s43,
+            s04, s14, s24, s34, s44,
+            s05, s15, s25, s35, s45;
+
+    String[] full = {s00, s10, s20, s30, s40,
+            s01, s11, s21, s31, s41,
+            s02, s12, s22, s32, s42,
+            s03, s13, s23, s33, s43,
+            s04, s14, s24, s34, s44,
+            s05, s15, s25, s35, s45};
+
+    String correct;
+
+    BorderPane bPain;
+    StackPane sPain;
+    GridPane gPain;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage mainStage) throws Exception {
+        window = mainStage;
+        mainStage.setTitle("Jordle");
+
+        bPain = new BorderPane();
+        //sPain = new StackPane();
+
+        gPain = new GridPane();
+        //sPain = new StackPane(bPain, gPain);
+        //sPain = new StackPane(bPain, gPain);
+        gPain.setPadding(new Insets(50,50,50,50));
+        gPain.setVgap(5);
+        gPain.setHgap(5);
+
+        //game = new Scene(bPain, 500, 500);
+        //instructions = new Scene(bPain, 300, 300);
+
+
+        Text t1 = new Text("Jordle");
+        t1.setFont(Font.font("Georgia", 36));
+        bPain.setAlignment(t1, Pos.TOP_CENTER);
+
+        bPain.setTop(t1);
+
+        instr = new Button("Instructions");
+        instr.setOnAction(e->{
+            instruction = new Stage();
+
+            instruction.initModality(Modality.APPLICATION_MODAL);
+            instruction.setTitle("Instructions");
+            instruction.setMinWidth(250);
+            instruction.setMinHeight(250);
+
+            Label label = new Label();
+            label.setText("Play the game dumbass.");
+
+            VBox lay = new VBox(10);
+            lay.getChildren().addAll(label, close);
+            lay.setAlignment(Pos.CENTER);
+
+            instructions = new Scene(lay);
+            instruction.setScene(instructions);
+            instruction.showAndWait();
+
+
+        });
+
+        close = new Button("I Understand");
+        close.setOnAction(e -> instruction.close());
+
+        bPain.setAlignment(instr, Pos.BOTTOM_CENTER);
+        bPain.setBottom(instr);
+
+
+        tb00 = new TextField();
+        tb00.setFont(Font.font("Georgia", 16));
+        tb00.setAlignment(Pos.CENTER);
+        tb00.setMaxSize(40, 40);
+        tb00.setMinSize(40,40);
+        //bPain.setCenter(tb00);
+        tb00.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb00.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb00.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb00.setText(s.replaceAll("[^\\sA-Z]", ""));
+                    s00 = s;
+                }
+        }});
+
+
+        tb01 = new TextField();
+        tb01.setFont(Font.font("Georgia", 16));
+        tb01.setAlignment(Pos.CENTER);
+        tb01.setMaxSize(40, 40);
+        tb01.setMinSize(40,40);
+        tb01.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb01.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb01.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb01.setText(s.replaceAll("[^\\sA-Z]", ""));
+                    s01 = s;
+                }
+            }});
+
+        //s01 = tb01.getCharacters().toString();
+
+        tb02 = new TextField();
+        tb02.setFont(Font.font("Georgia", 16));
+        tb02.setAlignment(Pos.CENTER);
+        tb02.setMaxSize(40, 40);
+        tb02.setMinSize(40,40);
+        tb02.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb02.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb02.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb02.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s02 = tb02.getCharacters().toString();
+
+        tb03 = new TextField();
+        tb03.setFont(Font.font("Georgia", 16));
+        tb03.setAlignment(Pos.CENTER);
+        tb03.setMaxSize(40, 40);
+        tb03.setMinSize(40,40);
+        tb03.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb03.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb03.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb03.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s03 = tb03.getCharacters().toString();
+
+
+        tb04 = new TextField();
+        tb04.setFont(Font.font("Georgia", 16));
+        tb04.setAlignment(Pos.CENTER);
+        tb04.setMaxSize(40, 40);
+        tb04.setMinSize(40,40);
+        tb04.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb04.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb04.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb04.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s04 = tb04.getCharacters().toString();
+
+        tb05 = new TextField();
+        tb05.setFont(Font.font("Georgia", 16));
+        tb05.setAlignment(Pos.CENTER);
+        tb05.setMaxSize(40, 40);
+        tb05.setMinSize(40,40);
+        tb05.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb05.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb05.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb05.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s05 = tb05.getCharacters().toString();
+
+        tb10 = new TextField();
+        tb10.setFont(Font.font("Georgia", 16));
+        tb10.setAlignment(Pos.CENTER);
+        tb10.setMaxSize(40, 40);
+        tb10.setMinSize(40,40);
+        tb10.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb10.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb10.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb10.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s10 = tb10.getCharacters().toString();
+
+        tb20 = new TextField();
+        tb20.setFont(Font.font("Georgia", 16));
+        tb20.setAlignment(Pos.CENTER);
+        tb20.setMaxSize(40, 40);
+        tb20.setMinSize(40,40);
+        tb20.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb20.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb20.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb20.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s20 = tb20.getCharacters().toString();
+
+        tb30 = new TextField();
+        tb30.setFont(Font.font("Georgia", 16));
+        tb30.setAlignment(Pos.CENTER);
+        tb30.setMaxSize(40, 40);
+        tb30.setMinSize(40,40);
+        tb30.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb30.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb30.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb30.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s30 = tb30.getCharacters().toString();
+
+        tb40 = new TextField();
+        tb40.setFont(Font.font("Georgia", 16));
+        tb40.setAlignment(Pos.CENTER);
+        tb40.setMaxSize(40, 40);
+        tb40.setMinSize(40,40);
+        tb40.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb40.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb40.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb40.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s40 = tb40.getCharacters().toString();
+
+        tb41 = new TextField();
+        tb41.setFont(Font.font("Georgia", 16));
+        tb41.setAlignment(Pos.CENTER);
+        tb41.setMaxSize(40, 40);
+        tb41.setMinSize(40,40);
+        tb41.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb41.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb41.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb41.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s41 = tb41.getCharacters().toString();
+
+        tb42 = new TextField();
+        tb42.setFont(Font.font("Georgia", 16));
+        tb42.setAlignment(Pos.CENTER);
+        tb42.setMaxSize(40, 40);
+        tb42.setMinSize(40,40);
+        tb42.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb42.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb42.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb42.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s42 = tb42.getCharacters().toString();
+
+        tb43 = new TextField();
+        tb43.setFont(Font.font("Georgia", 16));
+        tb43.setAlignment(Pos.CENTER);
+        tb43.setMaxSize(40, 40);
+        tb43.setMinSize(40,40);
+        tb43.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb43.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb43.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb43.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s43 = tb43.getCharacters().toString();
+
+        tb44 = new TextField();
+        tb44.setFont(Font.font("Georgia", 16));
+        tb44.setAlignment(Pos.CENTER);
+        tb44.setMaxSize(40, 40);
+        tb44.setMinSize(40,40);
+        tb44.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb44.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb44.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb44.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s44 = tb44.getCharacters().toString();
+
+        tb45 = new TextField();
+        tb45.setFont(Font.font("Georgia", 16));
+        tb45.setAlignment(Pos.CENTER);
+        tb45.setMaxSize(40, 40);
+        tb45.setMinSize(40,40);
+        tb45.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb45.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb45.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb45.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s45 = tb45.getCharacters().toString();
+
+        tb11 = new TextField();
+        tb11.setFont(Font.font("Georgia", 16));
+        tb11.setAlignment(Pos.CENTER);
+        tb11.setMaxSize(40, 40);
+        tb11.setMinSize(40,40);
+        tb11.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb11.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb11.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb11.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s11 = tb11.getCharacters().toString();
+
+        tb12 = new TextField();
+        tb12.setFont(Font.font("Georgia", 16));
+        tb12.setAlignment(Pos.CENTER);
+        tb12.setMaxSize(40, 40);
+        tb12.setMinSize(40,40);
+        tb12.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb12.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb12.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb12.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s12 = tb12.getCharacters().toString();
+
+        tb13 = new TextField();
+        tb13.setFont(Font.font("Georgia", 16));
+        tb13.setAlignment(Pos.CENTER);
+        tb13.setMaxSize(40, 40);
+        tb13.setMinSize(40,40);
+        tb13.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb13.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb13.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb13.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s13 = tb13.getCharacters().toString();
+
+        tb14 = new TextField();
+        tb14.setFont(Font.font("Georgia", 16));
+        tb14.setAlignment(Pos.CENTER);
+        tb14.setMaxSize(40, 40);
+        tb14.setMinSize(40,40);
+        tb14.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb14.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb14.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb14.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s14 = tb14.getCharacters().toString();
+
+        tb15 = new TextField();
+        tb15.setFont(Font.font("Georgia", 16));
+        tb15.setAlignment(Pos.CENTER);
+        tb15.setMaxSize(40, 40);
+        tb15.setMinSize(40,40);
+        tb15.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb15.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb15.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb15.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s15 = tb15.getCharacters().toString();
+
+        tb25 = new TextField();
+        tb25.setFont(Font.font("Georgia", 16));
+        tb25.setAlignment(Pos.CENTER);
+        tb25.setMaxSize(40, 40);
+        tb25.setMinSize(40,40);
+        tb25.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb25.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb25.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb25.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s25 = tb25.getCharacters().toString();
+
+        tb24 = new TextField();
+        tb24.setFont(Font.font("Georgia", 16));
+        tb24.setAlignment(Pos.CENTER);
+        tb24.setMaxSize(40, 40);
+        tb24.setMinSize(40,40);
+        tb24.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb24.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb24.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb24.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s24 = tb24.getCharacters().toString();
+
+        tb23 = new TextField();
+        tb23.setFont(Font.font("Georgia", 16));
+        tb23.setAlignment(Pos.CENTER);
+        tb23.setMaxSize(40, 40);
+        tb23.setMinSize(40,40);
+        tb23.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb23.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb23.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb23.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s23 = tb23.getCharacters().toString();
+
+        tb22 = new TextField();
+        tb22.setFont(Font.font("Georgia", 16));
+        tb22.setAlignment(Pos.CENTER);
+        tb22.setMaxSize(40, 40);
+        tb22.setMinSize(40,40);
+        tb22.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb22.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb22.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb22.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s22 = tb22.getCharacters().toString();
+
+        tb21 = new TextField();
+        tb21.setFont(Font.font("Georgia", 16));
+        tb21.setAlignment(Pos.CENTER);
+        tb21.setMaxSize(40, 40);
+        tb21.setMinSize(40,40);
+        tb21.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb21.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb21.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb21.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s21 = tb21.getCharacters().toString();
+
+        tb31 = new TextField();
+        tb31.setFont(Font.font("Georgia", 16));
+        tb31.setAlignment(Pos.CENTER);
+        tb31.setMaxSize(40, 40);
+        tb31.setMinSize(40,40);
+        tb31.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb31.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb31.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb31.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s31 = tb31.getCharacters().toString();
+
+        tb32 = new TextField();
+        tb32.setFont(Font.font("Georgia", 16));
+        tb32.setAlignment(Pos.CENTER);
+        tb32.setMaxSize(40, 40);
+        tb32.setMinSize(40,40);
+        tb32.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb32.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb32.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb32.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s32 = tb32.getCharacters().toString();
+
+        tb33 = new TextField();
+        tb33.setFont(Font.font("Georgia", 16));
+        tb33.setAlignment(Pos.CENTER);
+        tb33.setMaxSize(40, 40);
+        tb33.setMinSize(40,40);
+        tb33.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb33.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb33.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb33.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s33 = tb33.getCharacters().toString();
+
+        tb34 = new TextField();
+        tb34.setFont(Font.font("Georgia", 16));
+        tb34.setAlignment(Pos.CENTER);
+        tb34.setMaxSize(40, 40);
+        tb34.setMinSize(40,40);
+        tb34.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb34.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb34.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb34.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s34 = tb34.getCharacters().toString();
+
+        tb35 = new TextField();
+        tb35.setFont(Font.font("Georgia", 16));
+        tb35.setAlignment(Pos.CENTER);
+        tb35.setMaxSize(40, 40);
+        tb35.setMinSize(40,40);
+        tb35.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+                if (tb35.getText().length() >= 1 && !newValue.matches("\\sA-Z*")) {
+                    String s = tb35.getText().substring(0, 1);
+                    s = s.replace(s, s.toUpperCase());
+                    //tb00.setText(s);
+                    tb35.setText(s.replaceAll("[^\\sA-Z]", ""));
+                }
+            }});
+
+        s35 = tb35.getCharacters().toString();
+
+        //Column , Row
+        GridPane.setConstraints(tb00, 0, 0);
+        GridPane.setConstraints(tb01, 0, 1);
+        //GridPane.setConstraints(tb01, 0, 1);
+        GridPane.setConstraints(tb02, 0, 2);
+        GridPane.setConstraints(tb03, 0, 3);
+        GridPane.setConstraints(tb04, 0, 4);
+        GridPane.setConstraints(tb05, 0, 5);
+        GridPane.setConstraints(tb10, 1, 0);
+        GridPane.setConstraints(tb20, 2, 0);
+        GridPane.setConstraints(tb30, 3, 0);
+        GridPane.setConstraints(tb40, 4, 0);
+
+        GridPane.setConstraints(tb11, 1, 1);
+        GridPane.setConstraints(tb12, 1, 2);
+        GridPane.setConstraints(tb13, 1, 3);
+        GridPane.setConstraints(tb14, 1, 4);
+        GridPane.setConstraints(tb15, 1, 5);
+
+        GridPane.setConstraints(tb25, 2, 5);
+        GridPane.setConstraints(tb24, 2, 4);
+        GridPane.setConstraints(tb23, 2, 3);
+        GridPane.setConstraints(tb22, 2, 2);
+        GridPane.setConstraints(tb21, 2, 1);
+
+        GridPane.setConstraints(tb31, 3, 1);
+        GridPane.setConstraints(tb32, 3, 2);
+        GridPane.setConstraints(tb33, 3, 3);
+        GridPane.setConstraints(tb34, 3, 4);
+        GridPane.setConstraints(tb35, 3, 5);
+
+
+        GridPane.setConstraints(tb45, 4, 5);
+        GridPane.setConstraints(tb44, 4, 4);
+        GridPane.setConstraints(tb43, 4, 3);
+        GridPane.setConstraints(tb42, 4, 2);
+        GridPane.setConstraints(tb41, 4, 1);
+
+
+        gPain.getChildren().addAll(tb00, tb10, tb20, tb30, tb40,
+                                    tb01, tb11, tb21, tb31, tb41,
+                                    tb02, tb12, tb22, tb32, tb42,
+                                    tb03, tb13, tb23, tb33, tb43,
+                                    tb04, tb14, tb24, tb34, tb44,
+                                    tb05, tb15, tb25, tb35, tb45);
+
+        String[] guess1 = {s00, s10, s20, s30, s40};
+        String[] guess2 = {s01, s11, s21, s31, s41};
+        String[] guess3 = {s02, s12, s22, s32, s42};
+        String[] guess4 = {s03, s13, s23, s33, s43};
+        String[] guess5 = {s04, s14, s24, s34, s44};
+        String[] guess6 = {s05, s15, s25, s35, s45};
+
+
+
+        BorderPane.setAlignment(gPain, Pos.CENTER);
+        BorderPane.setMargin(gPain, new Insets(20,20,50,90)); // optional
+        bPain.setCenter(gPain);
+        //sPain.getChildren().addAll(gPain, bPain);
+        game = new Scene(bPain, 500, 500);
+
+
+
+        TextField[] textFields = {tb00, tb10, tb20, tb30, tb40,
+                                  tb01, tb11, tb21, tb31, tb41,
+                                  tb02, tb12, tb22, tb32, tb42,
+                                  tb03, tb13, tb23, tb33, tb43,
+                                  tb04, tb14, tb24, tb34, tb44,
+                                  tb05, tb15, tb25, tb35, tb45};
+
+
+        Random rand = new Random();
+        int randWord = rand.nextInt(Words.list.size());
+        System.out.println(randWord);
+        correct = Words.list.get(randWord);
+
+
+        for(int i = 0; i < 5; i++) {
+            if(Objects.equals(full[i], String.valueOf(correct.charAt(i)))) {
+                //answer at correct index
+            }
+            for (int j = 0; j < 5; j++) {
+                if(full[i] == String.valueOf(correct.charAt(j))) {
+                    // correct letter but at wrong index
+                }
+            }
+        }
+
+
+        registerListener(tb00,tb10);
+        registerListener(tb10,tb20);
+        registerListener(tb20,tb30);
+        registerListener(tb30,tb40);
+
+        registerListener(tb01,tb11);
+        registerListener(tb11,tb21);
+        registerListener(tb21,tb31);
+        registerListener(tb31,tb41);
+
+        registerListener(tb02,tb12);
+        registerListener(tb12,tb22);
+        registerListener(tb22,tb32);
+        registerListener(tb32,tb42);
+
+        registerListener(tb03,tb13);
+        registerListener(tb13,tb23);
+        registerListener(tb23,tb33);
+        registerListener(tb33,tb43);
+
+        registerListener(tb04,tb14);
+        registerListener(tb14,tb24);
+        registerListener(tb24,tb34);
+        registerListener(tb34,tb44);
+
+        registerListener(tb05,tb15);
+        registerListener(tb15,tb25);
+        registerListener(tb25,tb35);
+        registerListener(tb35,tb45);
+
+
+
+
+        window.setScene(game);
+        window.show();
+
+    }
+    private void registerListener(TextField tf1, TextField tf2) {
+        tf1.textProperty().addListener((obs, oldText, newText) -> {
+            if (oldText.length() < 1 && newText.length() >= 1) {
+                tf2.requestFocus();
+            }
+        });
+    }
+
+
+}

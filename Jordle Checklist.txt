@@ -1,0 +1,7 @@
+1). Check if letter is correct
+	- Both correct and wrong spot
+2). Check if word is correct
+3). Change colors
+4). Automatic shifting
+5). Restart the program with a blank slate
+
